@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         moodle_course_names
-// @version      0.1
+// @version      1.1
 // @description  Displays courses' names instead of random numbers!
 // @author       Eduardo Nazário (powy-e)
 // @match        https://moodle.novasbe.pt/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=novasbe.pt
+// @updateURL    https://raw.githubusercontent.com/powy-e/NOVA-SBE-tools/main/tampermonkey/moodle_course_names.js
+// @downloadURL  https://raw.githubusercontent.com/powy-e/NOVA-SBE-tools/main/tampermonkey/moodle_course_names.js
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
