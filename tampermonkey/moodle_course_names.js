@@ -1,14 +1,16 @@
 // ==UserScript==
 // @name         moodle_course_names
-// @version      1.1
+// @version      1.2
 // @description  Displays courses' names instead of random numbers!
 // @author       Eduardo Nazário (powy-e)
 // @match        https://moodle.novasbe.pt/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=novasbe.pt
 // @updateURL    https://raw.githubusercontent.com/powy-e/NOVA-SBE-tools/main/tampermonkey/moodle_course_names.js
 // @downloadURL  https://raw.githubusercontent.com/powy-e/NOVA-SBE-tools/main/tampermonkey/moodle_course_names.js
-// @grant        none
+// @grant        GM.setValue
+// @grant        GM.getValue
 // @run-at       document-end
+//
 // ==/UserScript==
 
 (function () {
@@ -26,7 +28,7 @@
             const num_li = ul_children.length;
             for (let k = 0; k < num_li; k++) {
                 // for every li find "My courses"
-                if (ul_children[k].textContent.trim() == "My courses") { // FOUND "My courses", courses should follow
+                if (ul_children[k].textContent.trim() === "My courses") { // FOUND "My courses", courses should follow
                     return getReplaceDataFromInnerPages(ul_children, k + 1, num_li);
                 }
             }
@@ -43,15 +45,27 @@ async function getReplaceDataFromInnerPages(ul_children, first_li_index, ul_leng
 }
 
 async function getReplaceDataFromPage(li, index) {
-    let response = await fetch(li.firstElementChild.href) // fetch website
-    let data = await response.text(); // get the actual HTML as text
+    const name_element = li.getElementsByClassName("media-body")[0];
+    const prev_name = name_element.textContent.trim();
+    let saved_name = await GM.getValue(prev_name);
 
-    let parser = new DOMParser();
-    let new_page = parser.parseFromString(data, "text/html");
-    let title = new_page.getElementsByTagName("title")[0].text.replace("Course:", "").trim().split("-"); // Extract title from page
 
-    let k;
-    if (title.length < 3) k = 0; else k = 1;
-    let name = title[k];
-    li.getElementsByClassName("media-body")[0].textContent = name;
+    if (!saved_name) {
+        // load the course page
+        let response = await fetch(li.firstElementChild.href) // fetch website
+        let data = await response.text(); // get the actual HTML as text
+
+        let parser = new DOMParser();
+        let new_page = parser.parseFromString(data, "text/html");
+        let title = new_page.getElementsByTagName("title")[0].text.replace("Course:", "").trim().split("-"); // Extract title from page
+
+        // get correct name
+        let index_correct_name;
+        if (title.length < 3) index_correct_name = 0; else index_correct_name = 1;
+        saved_name = title[index_correct_name];
+        GM.setValue(prev_name, saved_name);
+    }
+
+    // replace on the website
+    name_element.textContent = saved_name;
 }
