@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         moodle_course_names
-// @version      1.2
+// @version      1.3
 // @description  Displays courses' names instead of random numbers!
 // @author       Eduardo Nazário (powy-e)
 // @match        https://moodle.novasbe.pt/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=novasbe.pt
-// @updateURL    https://raw.githubusercontent.com/powy-e/NOVA-SBE-tools/main/tampermonkey/moodle_course_names.js
-// @downloadURL  https://raw.githubusercontent.com/powy-e/NOVA-SBE-tools/main/tampermonkey/moodle_course_names.js
+// @updateURL    https://raw.githubusercontent.com/novatechclub/Moodle-Course-Names/main/moodle_course_names.js
+// @downloadURL  https://raw.githubusercontent.com/novatechclub/Moodle-Course-Names/main/moodle_course_names.js
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @run-at       document-end
@@ -15,8 +15,6 @@
 
 (function () {
     'use strict';
-
-    // Your code here...
 
     let a = document.getElementById("nav-drawer").getElementsByTagName("nav"); // All nav on the sidebar
     const len = a.length;
